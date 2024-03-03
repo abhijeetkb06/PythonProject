@@ -1,0 +1,56 @@
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.by import By
+from selenium.common.exceptions import NoSuchElementException
+import time
+# Salesforce login credentials
+username = 'Abhijeet.Behera@couchbase.com'
+password = 'Godblessme$G1'
+
+# Salesforce record details
+opportunity_name = 'Huron'
+new_comments = 'Your_New_Comments'
+
+# Set up the Chrome webdriver (you can choose a different webdriver based on your browser)
+driver = webdriver.Chrome()
+
+try:
+    # Open Salesforce login page
+    driver.get('https://couchbase.lightning.force.com/lightning/r/Opportunity/0064X00002RJWo2QAH/view')
+
+    # Sleep to wait for the page to load (you might need to adjust the sleep duration)
+    time.sleep(1)
+
+    # Find the username input field and enter the username
+    username_field = driver.find_element(By.ID, 'input28')
+    username_field.send_keys(username)
+
+    # Find the password input field and enter the password
+    password_field = driver.find_element(By.ID, 'input36')
+    password_field.send_keys(password)
+
+    # Find the button by class name and click it
+    login_button = driver.find_element(By.CLASS_NAME, 'button.button-primary')
+    login_button.click()
+
+    # Sleep to wait for the page to load (you might need to adjust the sleep duration)
+    time.sleep(1)
+
+    # Find the button with data-se="okta_verify-push" attribute
+    okta_button = driver.find_element(By.CSS_SELECTOR, 'div[data-se="okta_verify-push"] a[data-se="button"]')
+    okta_button.click()
+
+    # Sleep to wait for the page to load (you might need to adjust the sleep duration)
+    time.sleep(3)
+
+    # Find the Edit button and click it to navigate to the edit page
+    edit_button = driver.find_element(By.XPATH, '//button[@title="Edit"]')
+    edit_button.click()
+
+
+    # Keep the browser open
+    input("Press Enter to exit...")
+
+finally:
+    # Close the browser when done
+    driver.quit()

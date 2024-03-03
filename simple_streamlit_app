@@ -1,0 +1,28 @@
+import streamlit as st
+import pandas as pd
+
+# Streamlit application
+def main():
+    st.title('Simple Streamlit Application')
+
+    # Text input example
+    user_input = st.text_input('Enter your name:', 'Your Name')
+    st.write('Hello,', user_input)
+
+    # Slider example
+    age = st.slider('Select your age:', 0, 100, 25)
+    st.write('Your age is:', age)
+
+    # Checkbox example
+    if st.checkbox('Show DataFrame'):
+        # Create a sample DataFrame
+        df = pd.DataFrame({
+            'Name': ['Alice', 'Bob', 'Charlie'],
+            'Age': [30, 25, 35],
+            'City': ['New York', 'San Francisco', 'Los Angeles']
+        })
+        # Display the DataFrame
+        st.dataframe(df)
+
+if __name__ == '__main__':
+    main()
