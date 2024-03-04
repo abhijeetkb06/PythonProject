@@ -122,3 +122,16 @@ elif page == "Data Visualization":
                     'color': {'field': 'month', 'type': 'nominal'}
                 }
             })
+
+# Load Data into Couchbase sales_data bucket
+# INSERT INTO `_default` (KEY, VALUE) VALUES 
+# ("ProductA_January", {"product": "Product A", "sales": 100, "month": "January"}),
+# ("ProductB_January", {"product": "Product B", "sales": 200, "month": "January"}),
+# ("ProductC_January", {"product": "Product C", "sales": 150, "month": "January"}),
+# ("ProductD_January", {"product": "Product D", "sales": 250, "month": "January"}),
+# ("ProductA_February", {"product": "Product A", "sales": 300, "month": "February"}),
+# ("ProductB_February", {"product": "Product B", "sales": 350, "month": "February"}),
+# ("ProductC_February", {"product": "Product C", "sales": 400, "month": "February"}),
+# ("ProductD_February", {"product": "Product D", "sales": 450, "month": "February"}),
+# ("ProductA_March", {"product": "Product A", "sales": 500, "month": "March"}),
+# ("ProductB_March", {"product": "Product B", "sales": 550, "month": "March"});
