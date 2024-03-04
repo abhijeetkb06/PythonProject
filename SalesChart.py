@@ -10,12 +10,16 @@ import json
 import matplotlib.pyplot as plt
 import plotly.express as px
 import altair as alt
+import plotly.graph_objects as go  # Import this library
 
-# User Input
-endpoint = st.text_input("Couchbase Endpoint", "couchbases://cb.wepvz44n89bkywd0.cloud.couchbase.com")
-username = st.text_input("Couchbase Username", "abhijeet")
-password = st.text_input("Couchbase Password", "Password@P1", type="password")
-bucket_name = st.text_input("Couchbase Bucket Name", "sales_data")
+# Set page configuration
+st.set_page_config(page_title='Couchbase Data Visualization', page_icon=":bar_chart:", layout='wide')
+
+# Couchbase Connection Details
+endpoint = "couchbases://cb.wepvz44n89bkywd0.cloud.couchbase.com"
+username = "abhijeet"
+password = "Password@P1"
+bucket_name = "sales_data"
 scope_name = "_default"
 
 # Connect options - authentication
@@ -71,11 +75,11 @@ for key, sales_data in sales_data_dict.items():
     df = pd.concat([df, temp_df], ignore_index=True)
 
 # Pages
-page = st.sidebar.selectbox("Choose a page", ["Data Exploration", "Data Visualization"])
+page = st.sidebar.radio("Choose a page", ["Data Exploration", "Data Visualization"])
 
 if page == "Data Exploration":
     # Display the DataFrame
-    st.write(df)
+    st.dataframe(df)
 
     # Data Download
     csv = df.to_csv(index=False)
@@ -85,32 +89,36 @@ if page == "Data Exploration":
 
 elif page == "Data Visualization":
     if df is not None:  # Check if df is not None before using it
-        # Display different types of charts
-        st.plotly_chart(px.line(df, x='month', y='sales', color='product'))
+        # Dropdown menu to select the type of chart, default to "Pie Chart"
+        chart_type = st.selectbox("Select a chart type", ["Line Chart", "Pie Chart", "Bar Chart", "Altair Chart", "Vega Lite Chart"], index=2)
 
-        # For pie chart, we use matplotlib
-        fig, ax = plt.subplots()
-        ax.pie(df['sales'], labels=df['product'], autopct='%1.1f%%')
-        st.pyplot(fig)
+        if chart_type == "Line Chart":
+            st.plotly_chart(px.line(df, x='month', y='sales', color='product'))
 
-        # For plotly chart
-        fig = px.bar(df, x='product', y='sales', color='month')
-        st.plotly_chart(fig)
+        elif chart_type == "Pie Chart":
+            fig = go.Figure(data=[go.Pie(labels=df['product'], values=df['sales'], hole=.3)])  # Creates a pie chart with a hole in the middle
+            fig.update_traces(hoverinfo='label+percent', textinfo='value', textfont_size=20,  # Updates the hover information and text size
+                      marker=dict(colors=['#FEBFB3', '#E1396C', '#96D38C', '#D0F9B1'], line=dict(color='#000000', width=2)))  # Sets the colors and line width
+            st.plotly_chart(fig)
 
-        # For altair chart
-        chart = alt.Chart(df).mark_bar().encode(
-            x='product',
-            y='sales',
-            color='month'
-        )
-        st.altair_chart(chart)
+        elif chart_type == "Bar Chart":
+            fig = px.bar(df, x='product', y='sales', color='month')
+            st.plotly_chart(fig)
 
-        # For Vega Lite chart
-        st.vega_lite_chart(df, {
-            'mark': 'bar',
-            'encoding': {
-                'x': {'field': 'product', 'type': 'nominal'},
-                'y': {'field': 'sales', 'type': 'quantitative'},
-                'color': {'field': 'month', 'type': 'nominal'}
-            }
-        })
+        elif chart_type == "Altair Chart":
+            chart = alt.Chart(df).mark_bar().encode(
+                x='product',
+                y='sales',
+                color='month'
+            )
+            st.altair_chart(chart)
+
+        elif chart_type == "Vega Lite Chart":
+            st.vega_lite_chart(df, {
+                'mark': 'bar',
+                'encoding': {
+                    'x': {'field': 'product', 'type': 'nominal'},
+                    'y': {'field': 'sales', 'type': 'quantitative'},
+                    'color': {'field': 'month', 'type': 'nominal'}
+                }
+            })
