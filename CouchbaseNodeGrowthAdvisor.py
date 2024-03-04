@@ -29,8 +29,8 @@ if st.button("Analyze Node Adjustment"):
     more_nodes_for_desired_ram = calculate_additional_nodes(ram_allocated_per_node, total_nodes, currently_used_ram_per_node, desired_ram_usage)
     st.text(f"Total Node Adjustment(Data/Index): {more_nodes_for_desired_ram}")
 
-if st.button("Clear"):
-    ram_allocated_per_node = 256.0
-    total_nodes = 36
-    ram_usage_slider = 90
-    desired_ram_usage = 0.0
+# if st.button("Clear"):
+#     ram_allocated_per_node = 256.0
+#     total_nodes = 36
+#     ram_usage_slider = 90
+#     desired_ram_usage = 0.0
