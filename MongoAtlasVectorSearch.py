@@ -129,7 +129,7 @@ def load_sample_data(client):
         return sample_movies
     else:
         st.info("Sample data already loaded.")
-        return list(collection.find({}, {'_id': 0, 'vector': 0}).limit(5))  # Return a few sample documents without the vector field
+        return list(collection.find({}, {'_id': 0, 'vector': 0}).limit(20))  # Return a few sample documents without the vector field
 
 # MongoDB connection and search functionality
 def search_movies(client, query_vector):
@@ -186,15 +186,19 @@ def main():
             query_vector = vectorize_text(query)
             results = search_movies(client, query_vector)
 
-            if results:
-                for result in results:
+            # Filter the results in Python based on the score
+            filtered_results = [result for result in results if result.get('score', 0) > 0.70]
+
+            # Check if filtered_results is empty
+            if filtered_results:  # This line was corrected
+                for result in filtered_results:
                     st.subheader(result['title'])
                     st.write(f"Description: {result['description']}")
                     st.write(f"Genres: {', '.join(result['genre'])}")
                     st.write(f"Search Score: {result.get('score', 'Not available')}")
                     st.markdown("---")
             else:
-                st.write("No movies found matching your search criteria.")
+                st.write("No movies found matching your search score criteria.")
     else:
         st.write("Please enter your MongoDB Atlas connection string to proceed.")
 
