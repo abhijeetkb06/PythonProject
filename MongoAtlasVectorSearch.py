@@ -2,6 +2,11 @@ import streamlit as st
 from pymongo import MongoClient
 from sentence_transformers import SentenceTransformer
 
+# Author: Abhijeet Behera
+# Date: 2024-03-10
+# Description: This is a demo of vector search using Mongo Atlas Vector search.
+
+
 # Initialize the vectorization model
 model = SentenceTransformer('all-MiniLM-L6-v2')
 
@@ -159,7 +164,7 @@ def search_movies(client, query_vector):
 
 # Streamlit UI components
 def main():
-    st.title("MongoDB Atlas Movie Search App")
+    st.title("Movie Search App Powered by MongoDB Atlas Vector Search")
 
     # MongoDB Atlas Connection Configuration
     connection_string = st.text_input("MongoDB Atlas connection string:")
@@ -186,12 +191,12 @@ def main():
             query_vector = vectorize_text(query)
             results = search_movies(client, query_vector)
 
-            # Filter the results in Python based on the score
-            filtered_results = [result for result in results if result.get('score', 0) > 0.70]
+            # Commented for now this filter resultss based on the score
+            # filtered_results = [result for result in results if result.get('score', 0) > 0.70]
 
             # Check if filtered_results is empty
-            if filtered_results:  # This line was corrected
-                for result in filtered_results:
+            # if filtered_results:  
+            for result in results:
                     st.subheader(result['title'])
                     st.write(f"Description: {result['description']}")
                     st.write(f"Genres: {', '.join(result['genre'])}")
